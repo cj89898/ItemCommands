@@ -1,6 +1,0 @@
-name: PickaxeCommand
-version: 1.1.0
-description: Runs a command when a player right clicks a pickaxe
-author: cj89898
-website: http://www.cjservers.net/
-main: net.cjservers.pickaxecommand.Main

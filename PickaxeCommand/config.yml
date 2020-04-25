@@ -1,6 +1,0 @@
-#PickaxeCommand v1.1.0 created by cj89898
-
-command: "spawn"
-cooldown: 1
-disabled-worlds:
- - world_nether

@@ -1,4 +1,4 @@
-package net.cjservers.pickaxecommand;
+package net.cjservers.itemcommands;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,13 +8,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Utils {
 	
-	Main plugin;
+	ItemCommands plugin;
 
-	public Utils(Main plugin) {
+	public Utils(ItemCommands plugin) {
 		this.plugin = plugin;
 	}
 	
-	private static final String DIRECTORY = "plugins/PickaxeCommand/";
+	private static final String DIRECTORY = "plugins/ItemCommands/";
 	
 	private static File getFile(String name) throws IOException {
 		File file = new File(DIRECTORY, name);
