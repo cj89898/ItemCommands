@@ -5,19 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.cjservers.itemcommands.objects.CommandItem;
 import net.cjservers.itemcommands.objects.Cooldown;
 
 public class ItemCommands extends JavaPlugin {
-	
-	static {
-		ConfigurationSerialization.registerClass(CommandItem.class, "CommandItem");
-	}
 	
 	private static ItemCommands instance;
 	private Utils utils;
@@ -38,18 +33,12 @@ public class ItemCommands extends JavaPlugin {
 		
 		confYml = new File(getDataFolder(), "config.yml");
 		
-		fixConf();
-		conf = Utils.getConfiguration("config.yml");
+		reloadConfigs();
 		
 		version = getDescription().getVersion();
 		
 		getServer().getPluginManager().registerEvents(new ClickListener(instance), this);
-		
-		ConfigurationSection configItems = conf.getConfigurationSection("items");
-		for (String item : configItems.getKeys(false)) {
-			ConfigurationSection ci = configItems.getConfigurationSection(item);
-			items.add(CommandItem.deserialize(ci));
-		}
+		getServer().getPluginCommand("itemcommands").setExecutor(new ItemCommandsCommand(instance));
 		
 	}
 	
@@ -66,7 +55,7 @@ public class ItemCommands extends JavaPlugin {
 		return utils;
 	}
 	
-	public void fixConf() {
+	private void fixConf() {
 		if (!(confYml.exists())) {
 			saveDefaultConfig();
 			Bukkit.getLogger().info("[ItemCommands] - Created config.yml");
@@ -74,7 +63,34 @@ public class ItemCommands extends JavaPlugin {
 	}
 	
 	public void reloadConfigs() {
+		fixConf();
 		conf = Utils.getConfiguration("config.yml");
+		
+		for (String item : conf.getConfigurationSection("items").getKeys(false)) {
+			String currentPath = "items." + item + ".";
+			CommandItem commandItem = new CommandItem();
+			List<Material> materials = new ArrayList<Material>();
+			List<String> strings = conf.getStringList(currentPath + "materials");
+			for (String s : strings) {
+				if (Material.matchMaterial(s) == null) {
+					Bukkit.getLogger().warning("Invalid material: " + s + " for item " + item);
+				} else {
+					materials.add(Material.matchMaterial(s));
+				}
+			}
+			commandItem.setMaterials(materials);
+			commandItem.setDisabledWorlds(conf.getStringList(currentPath + "disabled_worlds"));
+			
+			commandItem.setLeftClickCommands(conf.getStringList(currentPath + "left_click_commands"));
+			commandItem.setLeftClickMessage(Utils.color(conf.getString(currentPath + "left_click_message", null)));
+			commandItem.setLeftClickCooldown(conf.getInt(currentPath + "left_click_cooldown", 0));
+			
+			commandItem.setRightClickCommands(conf.getStringList(currentPath + "right_click_commands"));
+			commandItem.setRightClickMessage(Utils.color(conf.getString(currentPath + "right_click_message", null)));
+			commandItem.setRightClickCooldown(conf.getInt(currentPath + "right_click_cooldown", 0));
+			
+			items.add(commandItem);
+		}
 	}
 	
 }

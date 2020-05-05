@@ -1,20 +1,24 @@
-#ItemCommands v1.0.0 created by cj89898
+#ItemCommands v1.1.0 created by cj89898
 #
 #Example config
 #
+# Not all options are required.
+#
 #items:
-#  pickaxes: -- Name can be anything
-#    materials:
+#  pickaxes: #Name can be anything, just no duplicate names
+#    materials: #List of materials
 #      - wood_pickaxe
 #      - stone_pickaxe
 #      - iron_pickaxe
 #      - gold_pickaxe
 #      - diamond_pickaxe
-#    left_click_commands:
+#    left_click_commands: #Commands that are executed when the player left clicks
 #      - 'spawn'
-#    right_click_commands:
+#    right_click_commands: #Commands that are executed when the player right clicks
 #      - 'spawn'
-#    disabled_worlds:
+#    left_click_message: 'You must wait before clicking again!' #Messages that are sent to the player when they are on cooldown
+#    right_click_message: 'You must wait before clicking again!' #Messages that are sent to the player when they are on cooldown
+#    disabled_worlds: #Worlds where this item is disabled
 #      - world_nether
 #   left_click_cooldown: 20 #Based on ticks (20 per second)
 #   right_click_cooldown: 20 #Based on ticks (20 per second)
@@ -29,10 +33,22 @@ items:
       - gold_pickaxe
       - diamond_pickaxe
     left_click_commands:
-      - 'say hi'
+      - 'spawn'
     right_click_commands:
-      - 'say hello'
+      - 'fly'
     disabled_worlds:
       - world_nether
-    left_click_cooldown: 20
+    left_click_cooldown: 100
+    left_click_message: '&cYou can''t go to spawn yet!'
     right_click_cooldown: 20
+  axes:
+    materials:
+      - wood_axe
+      - stone_axe
+      - iron_axe
+      - gold_axe
+      - diamond_axe
+    right_click_commands:
+      - 'spawn'
+    right_click_cooldown: 20
+    right_click_message: "&cYou must wait before clicking again!"

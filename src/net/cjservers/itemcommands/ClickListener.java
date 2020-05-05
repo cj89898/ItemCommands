@@ -1,6 +1,8 @@
 package net.cjservers.itemcommands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -22,29 +24,37 @@ public class ClickListener implements Listener {
 	
 	@EventHandler
 	public void onClick(PlayerInteractEvent e) {
-		if (e.isCancelled() && e.getAction() != Action.RIGHT_CLICK_AIR) {
+		Bukkit.getLogger().info("1");
+		if (e.useItemInHand() == Event.Result.DENY) {
+			Bukkit.getLogger().info("2");
 			return;
 		}
+		Bukkit.getLogger().info("3");
 		
 		for (CommandItem item : plugin.items) {
+			Bukkit.getLogger().info("4");
+			Player player = e.getPlayer();
 			for (String world : item.getDisabledWorlds()) {
-				if (world.equalsIgnoreCase(e.getPlayer().getWorld().getName())) {
+				Bukkit.getLogger().info("5");
+				if (world.equalsIgnoreCase(player.getWorld().getName())) {
 					return;
 				}
 			}
 			if (item.getMaterials().contains(e.getMaterial())) {
+				Bukkit.getLogger().info("6");
 				if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) {
 					boolean onCooldown = false;
 					for (Cooldown c : plugin.cooldowns) {
-						if (c.check(e.getPlayer().getUniqueId(), item, ClickType.LEFT)) {
-							return;
+						if (c.check(player.getUniqueId(), item, ClickType.LEFT)) {
+							onCooldown = true;
+							break;
 						}
 					}
 					if (!onCooldown) {
 						for (String command : item.getLeftClickCommands()) {
-							Bukkit.getServer().dispatchCommand(e.getPlayer(), command);
+							Bukkit.getServer().dispatchCommand(player, command);
 						}
-						Cooldown cooldown = new Cooldown(e.getPlayer().getUniqueId(), item, ClickType.LEFT);
+						Cooldown cooldown = new Cooldown(player.getUniqueId(), item, ClickType.LEFT);
 						plugin.cooldowns.add(cooldown);
 						new BukkitRunnable() {
 							
@@ -55,20 +65,28 @@ public class ClickListener implements Listener {
 								}
 							}
 						}.runTaskLaterAsynchronously(plugin, item.getLeftClickCooldown());
+					} else {
+						if (item.getLeftClickMessage() != null) {
+							player.sendMessage(item.getLeftClickMessage());
+						}
 					}
 					
 				} else if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 					boolean onCooldown = false;
 					for (Cooldown c : plugin.cooldowns) {
-						if (c.check(e.getPlayer().getUniqueId(), item, ClickType.RIGHT)) {
-							return;
+						if (c.check(player.getUniqueId(), item, ClickType.RIGHT)) {
+							onCooldown = true;
+							break;
 						}
 					}
 					if (!onCooldown) {
-						for (String command : item.getLeftClickCommands()) {
-							Bukkit.getServer().dispatchCommand(e.getPlayer(), command);
+						for (String command : item.getRightClickCommands()) {
+							Bukkit.getServer().dispatchCommand(player, command);
 						}
-						Cooldown cooldown = new Cooldown(e.getPlayer().getUniqueId(), item, ClickType.RIGHT);
+						Cooldown cooldown = new Cooldown(player.getUniqueId(), item, ClickType.RIGHT);
+						if (item.getRightClickCooldown() == 0) {
+							return;
+						}
 						plugin.cooldowns.add(cooldown);
 						new BukkitRunnable() {
 							
@@ -79,6 +97,10 @@ public class ClickListener implements Listener {
 								}
 							}
 						}.runTaskLaterAsynchronously(plugin, item.getRightClickCooldown());
+					} else {
+						if (item.getRightClickMessage() != null) {
+							player.sendMessage(item.getRightClickMessage());
+						}
 					}
 					
 				}

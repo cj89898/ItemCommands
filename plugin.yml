@@ -1,6 +1,16 @@
 name: ItemCommands
-version: 1.0.0
+version: 1.1.0
 description: Customizable item commands
 author: cj89898
 website: http://www.cjservers.net/
 main: net.cjservers.itemcommands.ItemCommands
+commands:
+  itemcommands:
+    description: Displays help menu
+    usage: '/itemcommands'
+    aliases: ['ic']
+
+permissions:
+  itemcommands.reload:
+    description: Reloads the configs
+    default: op
