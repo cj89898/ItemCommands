@@ -1,6 +1,5 @@
 package net.cjservers.itemcommands.objects;
 
-import java.util.Date;
 import java.util.UUID;
 
 public class Cooldown {
@@ -12,7 +11,6 @@ public class Cooldown {
 	private UUID id;
 	private CommandItem item;
 	private ClickType type;
-	private Date date;
 	
 	public Cooldown(UUID id, CommandItem item, ClickType type) {
 		super();
@@ -27,10 +25,6 @@ public class Cooldown {
 	
 	public UUID getId() {
 		return id;
-	}
-	
-	public Date getDate() {
-		return date;
 	}
 	
 	public CommandItem getItem() {
