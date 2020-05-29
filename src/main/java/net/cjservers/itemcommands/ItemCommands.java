@@ -78,14 +78,40 @@ public class ItemCommands extends JavaPlugin {
 					materials.add(Material.matchMaterial(s));
 				}
 			}
+			List<String> leftClickCommands = conf.getStringList(currentPath + "left_click_commands");
+			List<String> rightClickCommands = conf.getStringList(currentPath + "right_click_commands");
+			if (leftClickCommands.size() > 0) {
+				List<String> leftClickActions = conf.getStringList(currentPath + "left_click_actions");
+				
+				for (String cmd : leftClickCommands) {
+					leftClickActions.add("[PLAYER] " + cmd);
+				}
+				if (leftClickActions.size() > 0) {
+					conf.set(currentPath + "left_click_actions", leftClickActions);
+				}
+				conf.set(currentPath + "left_click_commands", null);
+				Utils.save(conf, "config.yml");
+			}
+			if (rightClickCommands.size() > 0) {
+				List<String> rightClickActions = conf.getStringList(currentPath + "right_click_actions");
+				for (String cmd : rightClickCommands) {
+					rightClickActions.add("[PLAYER] " + cmd);
+				}
+				if (rightClickActions.size() > 0) {
+					conf.set(currentPath + "right_click_actions", rightClickActions);
+				}
+				conf.set(currentPath + "right_click_commands", null);
+				Utils.save(conf, "config.yml");
+			}
+			
 			commandItem.setMaterials(materials);
 			commandItem.setDisabledWorlds(conf.getStringList(currentPath + "disabled_worlds"));
 			
-			commandItem.setLeftClickCommands(conf.getStringList(currentPath + "left_click_commands"));
+			commandItem.setLeftClickActions(conf.getStringList(currentPath + "left_click_actions"));
 			commandItem.setLeftClickMessage(Utils.color(conf.getString(currentPath + "left_click_message", null)));
 			commandItem.setLeftClickCooldown(conf.getInt(currentPath + "left_click_cooldown", 0));
 			
-			commandItem.setRightClickCommands(conf.getStringList(currentPath + "right_click_commands"));
+			commandItem.setRightClickActions(conf.getStringList(currentPath + "right_click_actions"));
 			commandItem.setRightClickMessage(Utils.color(conf.getString(currentPath + "right_click_message", null)));
 			commandItem.setRightClickCooldown(conf.getInt(currentPath + "right_click_cooldown", 0));
 			

@@ -8,8 +8,8 @@ import org.bukkit.Material;
 public class CommandItem {
 	
 	private List<Material> materials = new ArrayList<Material>();
-	private List<String> leftClickCommands = new ArrayList<String>();
-	private List<String> rightClickCommands = new ArrayList<String>();
+	private List<String> leftClickActions = new ArrayList<String>();
+	private List<String> rightClickActions = new ArrayList<String>();
 	private List<String> disabledWorlds = new ArrayList<String>();
 	private int leftClickCooldown;
 	private int rightClickCooldown;
@@ -27,20 +27,20 @@ public class CommandItem {
 		this.materials = materials;
 	}
 	
-	public List<String> getLeftClickCommands() {
-		return leftClickCommands;
+	public List<String> getLeftClickActions() {
+		return leftClickActions;
 	}
 	
-	public void setLeftClickCommands(List<String> leftClickCommands) {
-		this.leftClickCommands = leftClickCommands;
+	public void setLeftClickActions(List<String> leftClickCommands) {
+		this.leftClickActions = leftClickCommands;
 	}
 	
-	public List<String> getRightClickCommands() {
-		return rightClickCommands;
+	public List<String> getRightClickActions() {
+		return rightClickActions;
 	}
 	
-	public void setRightClickCommands(List<String> rightClickCommands) {
-		this.rightClickCommands = rightClickCommands;
+	public void setRightClickActions(List<String> rightClickCommands) {
+		this.rightClickActions = rightClickCommands;
 	}
 	
 	public List<String> getDisabledWorlds() {
